@@ -1,6 +1,10 @@
-.MMM-ping .list,
-.MMM-ping-modal .list {
-    text-align: left;
+.MMM-ping .label {
+    padding-right: 50px;
+    vertical-align: middle;
+}
+
+.MMM-ping .value {
+    padding-right: 20px;
 }
 
 .MMM-ping .colored.green,
