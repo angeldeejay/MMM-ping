@@ -1,7 +1,7 @@
 <div class="MMM-ping-modal list">
     {% for entry in data.status %}
-        <div class="{% if data.config.colored %}colored {% endif %}{% if entry.online %}green{% else %}red{% endif %}">
-            <i class="fa fa-circle{% if not entry.online %}-o{% endif %}"></i>
+        <div>
+            <i class="fa fa-circle{% if not entry.online %}-o{% endif %} {% if data.config.colored %}colored {% endif %}{% if entry.online %}green{% else %}red{% endif %}"></i>
             {{ entry.label }}
         </div>
     {% endfor %}

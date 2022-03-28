@@ -1,7 +1,7 @@
 <div class="list {{ config.font }}">
     {% for entry in status %}
-        <div class="{% if config.colored %}colored {% endif %}{% if entry.online %}green{% else %}red{% endif %}">
-            <i class="fa fa-circle{% if not entry.online %}-o{% endif %}"></i>
+        <div>
+            <i class="fa fa-circle{% if not entry.online %}-o{% endif %} {% if config.colored %}colored {% endif %}{% if entry.online %}green{% else %}red{% endif %}"></i>
             {{ entry.label }}
         </div>
     {% endfor %}
