@@ -132,7 +132,7 @@ Module.register('MMM-ping', {
         this.checkHosts();
         setInterval(() => {
             this.checkHosts();
-        }, this.config.updateInterval * 60000);
+        }, this.config.updateInterval * 1000);
     },
 
     /**

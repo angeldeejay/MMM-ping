@@ -45,7 +45,7 @@ Ping Module for MagicMirror<sup>2</sup>
 | `colored`        | `false`     | show badge in color or not                                                     |
 | `display`        | `'both'`    | what should be displayed `'online'`, `'offline'` or `'both'`                   |
 | `hosts`          | `[]`        | addresses to ping                                                              |
-| `updateInterval` | `5`         | how often the module should ping the hosts in minutes                          |
+| `updateInterval` | `300`       | how often the module should ping the hosts in seconds                          |
 | `font`           | `'medium'`  | font size `'xsmall'`, `'small'`, `'medium'`, `'large'` or `'xlarge'`           |
 | `transitionTime` | `300`       | Time (in milliseconds) the transition for a new update in the DOM should take. |
 
