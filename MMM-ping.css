@@ -3,12 +3,12 @@
     text-align: left;
 }
 
-.MMM-ping div.colored.green,
-.MMM-ping-modal div.colored.green {
+.MMM-ping .colored.green,
+.MMM-ping-modal .colored.green {
     color: green;
 }
 
-.MMM-ping div.colored.red,
-.MMM-ping-modal div.colored.red {
+.MMM-ping .colored.red,
+.MMM-ping-modal .colored.red {
     color: red;
 }
