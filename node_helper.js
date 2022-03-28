@@ -42,13 +42,13 @@ module.exports = NodeHelper.create({
         if (notification === 'CHECK_HOSTS') {
             const status = [];
 
-            for (const host of payload) {
-                const { alive } = await ping.promise.probe(host);
+            for (const h of payload) {
+                const { alive } = await ping.promise.probe(h.host);
 
-                status.push({ host, online: alive });
+                status.push({ online: alive, ...h });
             }
 
             this.sendSocketNotification('STATUS_UPDATE', status);
         }
-    }
+    },
 });

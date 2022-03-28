@@ -33,14 +33,14 @@ Module.register('MMM-ping', {
     /** @member {Object} onlineMapping - Map online states to strings. */
     onlineMapping: {
         true: 'online',
-        false: 'offline'
+        false: 'offline',
     },
 
     /**
      * @member {Object} defaults - Defines the default config values.
      * @property {boolean} colored - Flag to render map in color or greyscale.
      * @property {string} display - Online states which should be displayed.
-     * @property {string[]} hosts - List of hosts to ping.
+     * @property {{label: string, host: string}[]|string[]} hosts - List of hosts to ping.
      * @property {int} updateInterval - Speed of update.
      * @property {string} font - Class name for font size.
      * @property {number} transitionTime - Time the transition for a new update in the DOM should take.
@@ -51,7 +51,7 @@ Module.register('MMM-ping', {
         hosts: [],
         updateInterval: 5,
         font: 'medium',
-        transitionTime: 300
+        transitionTime: 300,
     },
 
     /**
@@ -61,12 +61,7 @@ Module.register('MMM-ping', {
      */
     voice: {
         mode: 'PING',
-        sentences: [
-            'OPEN HELP',
-            'CLOSE HELP',
-            'SHOW ALL Hosts',
-            'HIDE HOSTS'
-        ]
+        sentences: ['OPEN HELP', 'CLOSE HELP', 'SHOW ALL Hosts', 'HIDE HOSTS'],
     },
 
     /**
@@ -79,7 +74,7 @@ Module.register('MMM-ping', {
     getTranslations() {
         return {
             en: 'translations/en.json',
-            de: 'translations/de.json'
+            de: 'translations/de.json',
         };
     },
 
@@ -113,11 +108,15 @@ Module.register('MMM-ping', {
      * @returns {object} Data for the nunjuck template.
      */
     getTemplateData() {
-        const status = this.status.filter(entry => this.config.display === 'both' || this.config.display === this.onlineMapping[entry.online]);
+        const status = this.status.filter(
+            entry =>
+                this.config.display === 'both'
+                || this.config.display === this.onlineMapping[entry.online]
+        );
 
         return {
             config: this.config,
-            status
+            status,
         };
     },
 
@@ -144,6 +143,7 @@ Module.register('MMM-ping', {
      * @returns {void}
      */
     checkHosts() {
+        this.fixHosts();
         this.sendSocketNotification('CHECK_HOSTS', this.config.hosts);
     },
 
@@ -174,11 +174,28 @@ Module.register('MMM-ping', {
     notificationReceived(notification, payload, sender) {
         if (notification === 'ALL_MODULES_STARTED') {
             this.sendNotification('REGISTER_VOICE_MODULE', this.voice);
-        } else if (notification === 'VOICE_PING' && sender.name === 'MMM-voice') {
+        } else if (
+            notification === 'VOICE_PING'
+            && sender.name === 'MMM-voice'
+        ) {
             this.checkCommands(payload);
-        } else if (notification === 'VOICE_MODE_CHANGED' && sender.name === 'MMM-voice' && payload.old === this.voice.mode) {
+        } else if (
+            notification === 'VOICE_MODE_CHANGED'
+            && sender.name === 'MMM-voice'
+            && payload.old === this.voice.mode
+        ) {
             this.sendNotification('CLOSE_MODAL');
         }
+    },
+
+    /**
+     * @function fixHosts
+     * @description Fix hosts config to allow using labels on them.
+     *
+     * @returns {void}
+     */
+    fixHosts() {
+        this.config.hosts = this.config.hosts.map(h => typeof h === 'string' ? { host: h, label: h } : h);
     },
 
     /**
@@ -199,9 +216,9 @@ Module.register('MMM-ping', {
                     data: {
                         ...this.voice,
                         fns: {
-                            translate: this.translate.bind(this)
-                        }
-                    }
+                            translate: this.translate.bind(this),
+                        },
+                    },
                 });
             }
         } else if (/(HIDE)/g.test(data) && /(HOSTS)/g.test(data)) {
@@ -213,10 +230,10 @@ Module.register('MMM-ping', {
                     config: this.config,
                     status: this.status,
                     fns: {
-                        translate: this.translate.bind(this)
-                    }
-                }
+                        translate: this.translate.bind(this),
+                    },
+                },
             });
         }
-    }
+    },
 });
