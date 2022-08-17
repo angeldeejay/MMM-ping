@@ -70,11 +70,12 @@ module.exports = NodeHelper.create({
 
                 status.sort((a, b) => a.index - b.index);
                 Log.log(
-                    "Received ping statuses for " +
-                        status.length +
-                        "hosts. Rescheculing for the next " +
+                    "Received ping statuses for " + status.length + " hosts"
+                );
+                Log.log(
+                    "Rescheculing for the next " +
                         status[0].updateInterval +
-                        " seconds."
+                        " seconds"
                 );
                 this.sendSocketNotification("STATUS_UPDATE", status);
             }
