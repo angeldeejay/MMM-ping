@@ -133,9 +133,6 @@ Module.register("MMM-ping", {
     start() {
         Log.info(`Starting module: ${this.name}`);
         this.checkHosts();
-        setInterval(() => {
-            this.checkHosts();
-        }, this.config.updateInterval * 1000);
     },
 
     /**
@@ -162,6 +159,9 @@ Module.register("MMM-ping", {
         if (notification === "STATUS_UPDATE") {
             this.status = payload;
             this.updateDom(this.config.transitionTime);
+            setTimeout(() => {
+                this.checkHosts();
+            }, this.config.updateInterval * 1000);
         }
     },
 
