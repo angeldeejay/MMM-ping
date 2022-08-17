@@ -44,7 +44,7 @@ module.exports = NodeHelper.create({
 
             // Ensure to make all ping requests in parallel
             await Promise.all(
-                payload.forEach(async (h, i) => {
+                payload.map(async (h, i) => {
                     const { alive } = await ping.promise.probe(h.host, {
                         timeout: h.timeout,
                     });
