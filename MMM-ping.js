@@ -40,7 +40,7 @@ Module.register('MMM-ping', {
      * @member {Object} defaults - Defines the default config values.
      * @property {boolean} colored - Flag to render map in color or greyscale.
      * @property {string} display - Online states which should be displayed.
-     * @property {object[]} hosts - List of hosts to ping.
+     * @property {Object[]} hosts - List of hosts to ping.
      * @property {int} updateInterval - Speed of update.
      * @property {int} timeout - Ping timeout.
      * @property {string} font - Class name for font size.
