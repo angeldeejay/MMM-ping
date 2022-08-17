@@ -73,7 +73,7 @@ module.exports = NodeHelper.create({
                     "Received ping statuses for " +
                         status.length +
                         "hosts. Rescheculing for the next " +
-                        status[0].timeout +
+                        status[0].updateInterval +
                         " seconds."
                 );
                 this.sendSocketNotification("STATUS_UPDATE", status);

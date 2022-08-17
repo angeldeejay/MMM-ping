@@ -200,8 +200,17 @@ Module.register("MMM-ping", {
     fixHosts() {
         this.config.hosts = this.config.hosts.map((h) =>
             typeof h === "string"
-                ? { host: h, label: h, timeout: this.config.timeout }
-                : { ...h, timeout: this.config.timeout }
+                ? {
+                      host: h,
+                      label: h,
+                      timeout: this.config.timeout,
+                      updateInterval: this.config.updateInterval,
+                  }
+                : {
+                      ...h,
+                      timeout: this.config.timeout,
+                      updateInterval: this.config.updateInterval,
+                  }
         );
     },
 
