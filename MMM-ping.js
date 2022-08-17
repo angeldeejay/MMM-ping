@@ -40,8 +40,9 @@ Module.register('MMM-ping', {
      * @member {Object} defaults - Defines the default config values.
      * @property {boolean} colored - Flag to render map in color or greyscale.
      * @property {string} display - Online states which should be displayed.
-     * @property {{label: string, host: string}[]|string[]} hosts - List of hosts to ping.
+     * @property {object[]} hosts - List of hosts to ping.
      * @property {int} updateInterval - Speed of update.
+     * @property {int} timeout - Ping timeout.
      * @property {string} font - Class name for font size.
      * @property {number} transitionTime - Time the transition for a new update in the DOM should take.
      */
@@ -50,6 +51,7 @@ Module.register('MMM-ping', {
         display: 'both',
         hosts: [],
         updateInterval: 5,
+        timeout: 2,
         font: 'medium',
         transitionTime: 300,
     },
@@ -75,6 +77,7 @@ Module.register('MMM-ping', {
         return {
             en: 'translations/en.json',
             de: 'translations/de.json',
+            es: 'translations/es.json',
         };
     },
 
@@ -195,7 +198,11 @@ Module.register('MMM-ping', {
      * @returns {void}
      */
     fixHosts() {
-        this.config.hosts = this.config.hosts.map(h => typeof h === 'string' ? { host: h, label: h } : h);
+        this.config.hosts = this.config.hosts.map(h =>
+            typeof h === 'string'
+                ? { host: h, label: h, timeout: this.config.timeout }
+                : { ...h, timeout: this.config.timeout }
+        );
     },
 
     /**
