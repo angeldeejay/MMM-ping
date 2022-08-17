@@ -26,6 +26,8 @@
  * @requires external:Module
  * @requires external:Log
  */
+const Log = require("../../js/logger.js");
+
 Module.register("MMM-ping", {
     /** @member {Object} status - List of results with hosts and their online status. */
     status: [],
@@ -144,6 +146,7 @@ Module.register("MMM-ping", {
      */
     checkHosts() {
         this.fixHosts();
+        Log.log("Pinging " + this.config.hosts.length + " hosts");
         this.sendSocketNotification("CHECK_HOSTS", this.config.hosts);
     },
 
@@ -159,8 +162,8 @@ Module.register("MMM-ping", {
         if (notification === "STATUS_UPDATE") {
             this.status = payload;
             this.updateDom(this.config.transitionTime);
-            console.log(
-                "Received ping statuss for " +
+            Log.log(
+                "Received ping statuses for " +
                     payload.length +
                     "hosts. Rescheculing for the next " +
                     this.config.timeout +
