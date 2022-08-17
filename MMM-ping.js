@@ -26,14 +26,14 @@
  * @requires external:Module
  * @requires external:Log
  */
-Module.register('MMM-ping', {
+Module.register("MMM-ping", {
     /** @member {Object} status - List of results with hosts and their online status. */
     status: [],
 
     /** @member {Object} onlineMapping - Map online states to strings. */
     onlineMapping: {
-        true: 'online',
-        false: 'offline',
+        true: "online",
+        false: "offline",
     },
 
     /**
@@ -48,11 +48,11 @@ Module.register('MMM-ping', {
      */
     defaults: {
         colored: false,
-        display: 'both',
+        display: "both",
         hosts: [],
         updateInterval: 5,
         timeout: 2,
-        font: 'medium',
+        font: "medium",
         transitionTime: 300,
     },
 
@@ -62,8 +62,8 @@ Module.register('MMM-ping', {
      * @property {string[]} sentences - All commands of this module.
      */
     voice: {
-        mode: 'PING',
-        sentences: ['OPEN HELP', 'CLOSE HELP', 'SHOW ALL Hosts', 'HIDE HOSTS'],
+        mode: "PING",
+        sentences: ["OPEN HELP", "CLOSE HELP", "SHOW ALL Hosts", "HIDE HOSTS"],
     },
 
     /**
@@ -75,9 +75,9 @@ Module.register('MMM-ping', {
      */
     getTranslations() {
         return {
-            en: 'translations/en.json',
-            de: 'translations/de.json',
-            es: 'translations/es.json',
+            en: "translations/en.json",
+            de: "translations/de.json",
+            es: "translations/es.json",
         };
     },
 
@@ -89,7 +89,7 @@ Module.register('MMM-ping', {
      * @returns {string[]} List of the style dependency filepaths.
      */
     getStyles() {
-        return ['MMM-ping.css'];
+        return ["MMM-ping.css"];
     },
 
     /**
@@ -100,7 +100,7 @@ Module.register('MMM-ping', {
      * @returns {string} Path to nunjuck template.
      */
     getTemplate() {
-        return 'templates/MMM-ping.njk';
+        return "templates/MMM-ping.njk";
     },
 
     /**
@@ -112,9 +112,9 @@ Module.register('MMM-ping', {
      */
     getTemplateData() {
         const status = this.status.filter(
-            entry =>
-                this.config.display === 'both'
-                || this.config.display === this.onlineMapping[entry.online]
+            (entry) =>
+                this.config.display === "both" ||
+                this.config.display === this.onlineMapping[entry.online]
         );
 
         return {
@@ -147,7 +147,7 @@ Module.register('MMM-ping', {
      */
     checkHosts() {
         this.fixHosts();
-        this.sendSocketNotification('CHECK_HOSTS', this.config.hosts);
+        this.sendSocketNotification("CHECK_HOSTS", this.config.hosts);
     },
 
     /**
@@ -159,7 +159,7 @@ Module.register('MMM-ping', {
      * @param {*} payload - Detailed payload of the notification.
      */
     socketNotificationReceived(notification, payload) {
-        if (notification === 'STATUS_UPDATE') {
+        if (notification === "STATUS_UPDATE") {
             this.status = payload;
             this.updateDom(this.config.transitionTime);
         }
@@ -175,19 +175,19 @@ Module.register('MMM-ping', {
      * @param {MM} [sender] - The sender of the notification. If sender is undefined the sender is the core.
      */
     notificationReceived(notification, payload, sender) {
-        if (notification === 'ALL_MODULES_STARTED') {
-            this.sendNotification('REGISTER_VOICE_MODULE', this.voice);
+        if (notification === "ALL_MODULES_STARTED") {
+            this.sendNotification("REGISTER_VOICE_MODULE", this.voice);
         } else if (
-            notification === 'VOICE_PING'
-            && sender.name === 'MMM-voice'
+            notification === "VOICE_PING" &&
+            sender.name === "MMM-voice"
         ) {
             this.checkCommands(payload);
         } else if (
-            notification === 'VOICE_MODE_CHANGED'
-            && sender.name === 'MMM-voice'
-            && payload.old === this.voice.mode
+            notification === "VOICE_MODE_CHANGED" &&
+            sender.name === "MMM-voice" &&
+            payload.old === this.voice.mode
         ) {
-            this.sendNotification('CLOSE_MODAL');
+            this.sendNotification("CLOSE_MODAL");
         }
     },
 
@@ -198,8 +198,8 @@ Module.register('MMM-ping', {
      * @returns {void}
      */
     fixHosts() {
-        this.config.hosts = this.config.hosts.map(h =>
-            typeof h === 'string'
+        this.config.hosts = this.config.hosts.map((h) =>
+            typeof h === "string"
                 ? { host: h, label: h, timeout: this.config.timeout }
                 : { ...h, timeout: this.config.timeout }
         );
@@ -216,10 +216,10 @@ Module.register('MMM-ping', {
     checkCommands(data) {
         if (/(HELP)/g.test(data)) {
             if (/(CLOSE)/g.test(data) && !/(OPEN)/g.test(data)) {
-                this.sendNotification('CLOSE_MODAL');
+                this.sendNotification("CLOSE_MODAL");
             } else if (/(OPEN)/g.test(data) && !/(CLOSE)/g.test(data)) {
-                this.sendNotification('OPEN_MODAL', {
-                    template: 'templates/HelpModal.njk',
+                this.sendNotification("OPEN_MODAL", {
+                    template: "templates/HelpModal.njk",
                     data: {
                         ...this.voice,
                         fns: {
@@ -229,10 +229,10 @@ Module.register('MMM-ping', {
                 });
             }
         } else if (/(HIDE)/g.test(data) && /(HOSTS)/g.test(data)) {
-            this.sendNotification('CLOSE_MODAL');
+            this.sendNotification("CLOSE_MODAL");
         } else if (/(SHOW)/g.test(data) && /(HOSTS)/g.test(data)) {
-            this.sendNotification('OPEN_MODAL', {
-                template: 'templates/PingModal.njk',
+            this.sendNotification("OPEN_MODAL", {
+                template: "templates/PingModal.njk",
                 data: {
                     config: this.config,
                     status: this.status,
