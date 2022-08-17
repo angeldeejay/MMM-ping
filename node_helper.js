@@ -45,17 +45,16 @@ module.exports = NodeHelper.create({
             // Ensure to make all ping requests in parallel
             await Promise.all(
                 payload.map(async (h, i) => {
-                    let alive = false;
+                    let online = false;
                     try {
-                        const { a } = await ping.promise.probe(h.host, {
+                        const { alive } = await ping.promise.probe(h.host, {
                             timeout: h.timeout,
                         });
-                        alive = a;
-                    } catch (_err) {
-                        //
-                    }
+                        online = alive;
+                    // eslint-disable-next-line no-empty
+                    } catch (err) {}
 
-                    status.push({ online: alive, ...h, index: i });
+                    status.push({ online, ...h, index: i });
                 })
             );
 

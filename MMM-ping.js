@@ -159,6 +159,13 @@ Module.register("MMM-ping", {
         if (notification === "STATUS_UPDATE") {
             this.status = payload;
             this.updateDom(this.config.transitionTime);
+            console.log(
+                "Received ping statuss for " +
+                    payload.length +
+                    "hosts. Rescheculing for the next " +
+                    this.config.timeout +
+                    " seconds."
+            );
             setTimeout(() => {
                 this.checkHosts();
             }, this.config.updateInterval * 1000);
